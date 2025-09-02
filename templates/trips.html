@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Corse della linea {{ route_id }}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body class="p-4"  data-route-id="{{ route_id }}">
+  <button class="btn btn-secondary mb-3" onclick="history.back()" style="position: fixed; top: 20px; left: 20px; z-index: 1050;">
+    ← Indietro
+  </button>
+  <div class="container">
+    <h1 class="mb-4">Corse della linea con route_id: {{ route_id }}</h1>
+
+    <button class="btn btn-pill mb-3" onclick="apriModalNuovaCorsa()">+ Aggiungi Nuova Corsa</button>
+
+    <div class="mb-3">
+      <button class="btn btn-primary me-2" onclick="caricaDurataMedia()">Mostra/Nascondi Durata Media Corse</button>
+      <button class="btn btn-primary" onclick="caricaGraficoLinee()">Mostra/Nascondi Corse in partenza per fascia oraria</button>
+    </div>
+    <div id="grafico-durata" style="margin-top:2rem;"></div>
+    <div id="grafico-corse-ora" style="margin-top:2rem; margin-bottom: 2rem;"></div>
+    
+
+
+
+   
+    <table class="table table-hover table-glass" id="trips-table">
+      <thead>
+        <tr>
+          <th>ID corsa</th>
+          <th>Descrizione</th>
+          <th>Nome breve</th>
+          <th>Orario partenza</th> 
+          <th>Orario arrivo</th> 
+          <th>Azioni</th>
+        </tr>
+      </thead>
+      <tbody id="trips-body">
+        <!-- Righe inserite con JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal per creare/modificare una corsa -->
+  <div class="modal fade" id="tripModal" tabindex="-1">
+    <div class="modal-dialog">
+      <form class="modal-content" onsubmit="salvaCorsa(event)">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Nuova Corsa</h5>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="modalMode" value="create" />
+          <input type="hidden" id="originalTripId" />
+
+          <div class="mb-3">
+            <label class="form-label">ID corsa</label>
+            <input type="text" class="form-control" id="trip_id" required />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Descrizione</label>
+            <input type="text" class="form-control" id="trip_headsign" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Nome breve</label>
+            <input type="text" class="form-control" id="trip_short_name" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Salva</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal conferma eliminazione -->
+  <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title">Conferma Eliminazione</h5>
+        </div>
+        <div class="modal-body">
+          <p>Sei sicuro di voler eliminare questa corsa?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+          <button type="button" class="btn btn-danger" onclick="confermaEliminazione()">Elimina</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenitore dei toast -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" style="z-index: 9999;"></div>
+
+
+
+
+
+
+  <!-- Bootstrap + Script JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!--Plotly-->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <!-- Script personalizzato -->
+  <script src="{{ url_for('static', filename='js/trips.js') }}"></script>
+
+
+
+
+
+</body>
+</html>
